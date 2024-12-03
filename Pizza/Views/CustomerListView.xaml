@@ -55,7 +55,7 @@
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Content="оформить заказ"
+                            <Button Content="Оформить заказ"
                                     Command="{Binding DataContext.PlaceOrderCommand,
                                         RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
                                     CommandParameter="{Binding}"
@@ -67,11 +67,23 @@
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Content="редактировать"
+                            <Button Content="Редактировать"
                                     Command="{Binding DataContext.EditCustomerCommand,
                                         RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
                                     CommandParameter="{Binding}"
                                     Margin="5"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Заказы"
+                    Command="{Binding DataContext.CustomerOrdersViewCommand,
+                        RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                    CommandParameter="{Binding}"
+                    Margin="5"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

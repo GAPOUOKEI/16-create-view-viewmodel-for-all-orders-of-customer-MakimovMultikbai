@@ -14,8 +14,8 @@ namespace Pizza.Services
         static RepoContainer()
         {
             _container = new UnityContainer();
-            _container.RegisterType<ICustomerRepository, CustomerRepository>(
-                new ContainerControlledLifetimeManager());
+            _container.RegisterType<ICustomerRepository, CustomerRepository>(new ContainerControlledLifetimeManager());
+            _container.RegisterType<IOrderRepository, OrderRepository>(new ContainerControlledLifetimeManager());
         }
 
         public static IUnityContainer Container

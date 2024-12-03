@@ -7,6 +7,33 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-            
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="" Grid.Row="0"/>
+
+        <DataGrid ItemsSource="{Binding Orders}"  AutoGenerateColumns="False" CanUserAddRows="False" Grid.Row="1">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Id" Binding="{Binding Id}" />
+                <DataGridTextColumn Header="Order Date" Binding="{Binding OrderDate}" />
+                <DataGridTextColumn Header="Phone" Binding="{Binding Phone}" />
+                <DataGridTextColumn Header="Delivery Street" Binding="{Binding DeliveryStreet}" />
+                <DataGridTextColumn Header="Delivery City" Binding="{Binding DeliveryCity}" />
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Просмотр"
+                    Command="{Binding DataContext.BrowsingOrderCommand,
+                        RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                    CommandParameter="{Binding}"
+                    Margin="5"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </UserControl>

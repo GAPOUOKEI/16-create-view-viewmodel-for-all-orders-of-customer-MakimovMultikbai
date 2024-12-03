@@ -9,7 +9,7 @@ namespace Pizza
 {
     public class RelayCommand : ICommand
     {
-        private Action _execute;
+        private Action _execute;    
         private Func<bool> _canExecute;
         #region конструкторы
         public RelayCommand(Action execute) => _execute = execute;

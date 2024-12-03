@@ -20,12 +20,17 @@ namespace Pizza.Services
         //удалить заказ
         Task DeleteOrderAsync(long orderId);
 
+        Task<List<OrderItem>> GetAllOrderItems();
+        Task<List<OrderItem>> GetOrderItemsByOrderId(long Id);
+
         //получить список всех продуктов
         Task<List<Product>> GetAllProductsAsync();
         //получить список ингридиентов
         Task<List<ProductOption>> GetAllProductOptionsAsync();
         //получить список размеров и объемов 
         Task<List<ProductSize>> GetAllProductSizesAsync();
+        Task<Order> GetOrderById(long Id);
+        void AttachProduct(Product product);
         //получить список статусов заказов
         Task<List<OrderStatus>> GetAllOrderStatusesAsync();
     }
