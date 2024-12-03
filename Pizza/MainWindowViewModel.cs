@@ -13,25 +13,33 @@ namespace Pizza
 {
     class MainWindowViewModel : BindableBase
     {
-        private AddEditCustomerViewModel _addEditCustomerVewModel;
-        private CustomerListViewModel _customerListViewModel;
-        private OrderPerpViewModel _orderPrepViewModel;
-        private OrderViewModer _orderViewModel;
+        private AddEditCustomerViewModel    _addEditCustomerVewModel;
+        private CustomerListViewModel       _customerListViewModel;
+        private OrderPerpViewModel          _orderPrepViewModel;
+        private OrderViewModel              _orderViewModel;
+        private BrowseOrderViewModel        _browseOrderViewModel;
 
         private ICustomerRepository _customerRepository = new CustomerRepository();
 
         public MainWindowViewModel()
         {
             NavigationCommand = new RelayCommand<string>(OnNavigation);
-            //_customerListViewModel = new CustomerListViewModel(new CustomerRepository()) ;
-            //_addEditCustomerVewModel = new AddEditCustomerViewModel(new CustomerRepository()) ; 
+
             _customerListViewModel = RepoContainer.Container.Resolve<CustomerListViewModel>();  
             _addEditCustomerVewModel = RepoContainer.Container.Resolve<AddEditCustomerViewModel>();
+            _orderPrepViewModel = RepoContainer.Container.Resolve<OrderPerpViewModel>();
+            _orderViewModel = RepoContainer.Container.Resolve<OrderViewModel>();
+            _browseOrderViewModel = RepoContainer.Container. Resolve<BrowseOrderViewModel>();
 
             _customerListViewModel.AddCustomerRequested +=NavigationToAddCustomer;
             _customerListViewModel.EditCustomerRequested += NavigationToEditCustomer;
+
             _customerListViewModel.PlaceOrderRequested += NavigateToOrder;
-           
+            _customerListViewModel.CustomerOrdersRequested += NavigateToCustomerOrders;
+            _orderViewModel.BrowsingOrderRequested += NavigateToBrowseOrder;
+
+            _addEditCustomerVewModel.Done += () => CurrentViewModel = _customerListViewModel;
+            _orderPrepViewModel.Done += () => CurrentViewModel = _customerListViewModel;
         }
         private BindableBase _currentViewModel;
         public BindableBase CurrentViewModel
@@ -40,7 +48,7 @@ namespace Pizza
             set => SetProperty(ref _currentViewModel, value);
         }
 
-        public RelayCommand<string> NavigationCommand { get; private set; }
+       public RelayCommand<string> NavigationCommand { get; private set; }
 
         //открывать список клиентов
         private void OnNavigation(string dest)
@@ -78,10 +86,21 @@ namespace Pizza
         }
 
         //окно для оформления заказа
-        private void NavigateToOrder(Customer customer)
+        private async void NavigateToOrder(Customer customer)
         {
-            _orderViewModel.Id = customer.Id;
+            _orderPrepViewModel.Id = customer.Id;
+            CurrentViewModel = _orderPrepViewModel;
+        }
+
+        private async void NavigateToCustomerOrders(Customer customer)
+        {
+            _orderViewModel.LoadData(customer.Id);
             CurrentViewModel = _orderViewModel;
+        }
+        private async void NavigateToBrowseOrder(Order order)
+        {
+            _browseOrderViewModel.LoadData(order.Id); 
+            CurrentViewModel = _browseOrderViewModel;
         }
     }
 }

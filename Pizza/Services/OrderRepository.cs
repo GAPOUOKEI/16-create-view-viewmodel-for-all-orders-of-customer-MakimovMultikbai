@@ -21,6 +21,14 @@ namespace Pizza.Services
             return order;
         }
 
+        public void AttachProduct(Product product)
+        {
+            if (_context.Entry(product).State == EntityState.Detached)
+            {
+                _context.Products.Attach(product);
+            }
+        }
+
         public async Task DeleteOrderAsync(long orderId)
         {
             using (TransactionScope scope = new TransactionScope()) 
@@ -48,7 +56,6 @@ namespace Pizza.Services
         }
 
         public Task<List<Order>> GetAllOrdersAsync()=> _context.Orders.ToListAsync();
-        
 
         public Task<List<OrderStatus>> GetAllOrderStatusesAsync()=> _context.OrderStatuses.ToListAsync();
 
@@ -57,6 +64,12 @@ namespace Pizza.Services
         public Task<List<Product>> GetAllProductsAsync() => _context.Products.ToListAsync();    
 
         public Task<List<ProductSize>> GetAllProductSizesAsync() => _context.ProductSizes.ToListAsync();
+
+        public Task<List<OrderItem>> GetAllOrderItems() => _context.OrderItems.Include(p=> p.Product).ToListAsync();
+
+        public Task<List<OrderItem>> GetOrderItemsByOrderId(long Id) => _context.OrderItems.Where(oi => oi.OrderId == Id).Include(p => p.Product).ToListAsync();
+
+        public Task<Order> GetOrderById(long Id) => _context.Orders.FirstOrDefaultAsync(o => o.Id == Id);
 
         public Task<List<Order>> GetOrdersByCustomerAsync(Guid customerId)=>
             _context.Orders.Where(o => o.CustomerId == customerId).ToListAsync();   

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Pizza.Services;
+﻿using Pizza.Services;
 using Pizza.Models;
 using System.Collections.ObjectModel;
 
@@ -23,6 +18,7 @@ namespace Pizza.ViewModels
              AddCustomerCommand = new RelayCommand(OnAddCustomer);
              EditCustomerCommand = new RelayCommand<Customer>(OnEditCustomer);
              ClearSearchInput = new RelayCommand(OnClearSearch);
+             CustomerOrdersViewCommand = new RelayCommand<Customer>(OnCustomerOrders);
          }
     
          private ObservableCollection<Customer>? _customers;
@@ -69,10 +65,12 @@ namespace Pizza.ViewModels
          public RelayCommand AddCustomerCommand { get; private set; }
          public RelayCommand<Customer> EditCustomerCommand { get; private set; }
          public RelayCommand ClearSearchInput {  get; private set; }
+         public RelayCommand<Customer> CustomerOrdersViewCommand { get; private set; }
         
          public event Action<Customer> PlaceOrderRequested = delegate { };
          public event Action AddCustomerRequested = delegate { };
          public event Action<Customer> EditCustomerRequested = delegate { }; 
+         public event Action<Customer> CustomerOrdersRequested = delegate { };
         
          private void OnPlaceOrder(Customer customer)
          {
@@ -82,11 +80,15 @@ namespace Pizza.ViewModels
          private void OnAddCustomer()
          {
             AddCustomerRequested?.Invoke();
-        }
+         }
         
          private void OnEditCustomer(Customer customer)
          {
              EditCustomerRequested(customer);
+         }
+         private void OnCustomerOrders(Customer customer)
+         {
+            CustomerOrdersRequested(customer);
          }
         
          private void OnClearSearch()
